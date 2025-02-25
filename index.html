@@ -2,20 +2,23 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Битва с монстром</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
-        body { margin: 0; }
+        body { margin: 0; overflow: hidden; }
         canvas { display: block; }
     </style>
 </head>
 <body>
     <script>
+        let gameWidth = window.innerWidth;  // Определяем ширину экрана
+        let gameHeight = window.innerHeight; // Определяем высоту экрана
+
         let config = {
             type: Phaser.AUTO,
-            width: 800,
-            height: 600,
+            width: gameWidth,
+            height: gameHeight,
             scene: [MenuScene, GameScene]
         };
 
@@ -25,19 +28,19 @@
 
         function MenuScene() {
             this.preload = function() {
-                this.load.image('background', 'https://avatars.mds.yandex.net/i?id=f7ee800ce28ad28785d2e2efcab12666_l-5220579-images-thumbs&n=13'); // Светлый фон
-                this.load.image('warrior', 'https://avatars.mds.yandex.net/i?id=f7ee800ce28ad28785d2e2efcab12666_l-5220579-images-thumbs&n=13'); // Воин
-                this.load.image('mage', 'https://avatars.mds.yandex.net/i?id=f7ee800ce28ad28785d2e2efcab12666_l-5220579-images-thumbs&n=13'); // Маг
-                this.load.image('archer', 'https://avatars.mds.yandex.net/i?id=f7ee800ce28ad28785d2e2efcab12666_l-5220579-images-thumbs&n=13'); // Лучник
+                this.load.image('background', 'https://via.placeholder.com/800x600'); // Фон (замени на свой)
+                this.load.image('warrior', 'https://via.placeholder.com/100'); // Воин
+                this.load.image('mage', 'https://via.placeholder.com/100'); // Маг
+                this.load.image('archer', 'https://via.placeholder.com/100'); // Лучник
             };
 
             this.create = function() {
-                this.add.image(100, 100, 'background').setScale(1.5);
-                this.add.text(180, 50, 'Выбери героя:', { fontSize: '32px', fill: '#000' });
+                this.add.image(gameWidth / 2, gameHeight / 2, 'background').setScale(1.5);
+                this.add.text(gameWidth / 2 - 80, 50, 'Выбери героя:', { fontSize: '24px', fill: '#000' });
 
-                let warriorBtn = this.add.image(40, 100, 'warrior').setScale(0.3).setInteractive();
-                let mageBtn = this.add.image(100, 100, 'mage').setScale(0.3).setInteractive();
-                let archerBtn = this.add.image(300, 100, 'archer').setScale(0.3).setInteractive();
+                let warriorBtn = this.add.image(gameWidth / 4, gameHeight / 2, 'warrior').setScale(0.3).setInteractive();
+                let mageBtn = this.add.image(gameWidth / 2, gameHeight / 2, 'mage').setScale(0.3).setInteractive();
+                let archerBtn = this.add.image((gameWidth / 4) * 3, gameHeight / 2, 'archer').setScale(0.3).setInteractive();
 
                 warriorBtn.on('pointerdown', () => { playerType = "warrior"; this.scene.start('GameScene'); });
                 mageBtn.on('pointerdown', () => { playerType = "mage"; this.scene.start('GameScene'); });
@@ -48,17 +51,17 @@
         function GameScene() {
             this.key = 'GameScene';
             this.preload = function() {
-                this.load.image('background', 'https://avatars.mds.yandex.net/i?id=f7ee800ce28ad28785d2e2efcab12666_l-5220579-images-thumbs&n=13'); // Фон
-                this.load.image('monster', 'https://avatars.mds.yandex.net/i?id=f7ee800ce28ad28785d2e2efcab12666_l-5220579-images-thumbs&n=13'); // Монстр
-                this.load.image('attackButton', 'https://avatars.mds.yandex.net/i?id=f7ee800ce28ad28785d2e2efcab12666_l-5220579-images-thumbs&n=13'); // Кнопка атаки
+                this.load.image('background', 'https://via.placeholder.com/800x600'); // Фон
+                this.load.image('monster', 'https://via.placeholder.com/150'); // Монстр
+                this.load.image('attackButton', 'https://via.placeholder.com/200x50'); // Кнопка атаки
             };
 
             this.create = function() {
-                this.add.image(400, 300, 'background').setScale(1.5);
-                this.add.image(400, 300, 'monster').setScale(0.5);
-                let monsterText = this.add.text(250, 100, 'Здоровье монстра: 100', { fontSize: '28px', fill: '#000' });
+                this.add.image(gameWidth / 2, gameHeight / 2, 'background').setScale(1.5);
+                this.add.image(gameWidth / 2, gameHeight / 3, 'monster').setScale(0.5);
+                let monsterText = this.add.text(gameWidth / 2 - 100, 50, 'Здоровье монстра: 100', { fontSize: '24px', fill: '#000' });
 
-                let attackButton = this.add.image(400, 500, 'attackButton').setScale(0.3).setInteractive();
+                let attackButton = this.add.image(gameWidth / 2, gameHeight - 100, 'attackButton').setScale(0.5).setInteractive();
 
                 let attackEffects = {
                     "warrior": "⚔️ Меч!",
@@ -71,12 +74,12 @@
                         monsterHP -= 20;
                         monsterText.setText('Здоровье монстра: ' + Math.max(monsterHP, 0));
 
-                        let effectText = this.add.text(350, 400, attackEffects[playerType], { fontSize: '32px', fill: '#ff0' });
+                        let effectText = this.add.text(gameWidth / 2 - 40, gameHeight / 2, attackEffects[playerType], { fontSize: '32px', fill: '#ff0' });
                         setTimeout(() => effectText.destroy(), 500);
 
                         if (monsterHP <= 0) {
                             monsterText.setText('Монстр побежден!');
-                            let restartButton = this.add.text(350, 450, 'Начать заново', { fontSize: '24px', fill: '#ff0' })
+                            let restartButton = this.add.text(gameWidth / 2 - 60, gameHeight / 2 + 50, 'Начать заново', { fontSize: '24px', fill: '#ff0' })
                                 .setInteractive()
                                 .on('pointerdown', () => location.reload());
                         }
