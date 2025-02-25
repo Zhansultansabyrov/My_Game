@@ -32,12 +32,12 @@
             };
 
             this.create = function() {
-                this.add.image(400, 300, 'background').setScale(1.5);
-                this.add.text(280, 100, 'Выбери героя:', { fontSize: '32px', fill: '#000' });
+                this.add.image(100, 100, 'background').setScale(1.5);
+                this.add.text(180, 50, 'Выбери героя:', { fontSize: '32px', fill: '#000' });
 
-                let warriorBtn = this.add.image(200, 300, 'warrior').setScale(0.3).setInteractive();
-                let mageBtn = this.add.image(400, 300, 'mage').setScale(0.3).setInteractive();
-                let archerBtn = this.add.image(600, 300, 'archer').setScale(0.3).setInteractive();
+                let warriorBtn = this.add.image(40, 100, 'warrior').setScale(0.3).setInteractive();
+                let mageBtn = this.add.image(100, 100, 'mage').setScale(0.3).setInteractive();
+                let archerBtn = this.add.image(300, 100, 'archer').setScale(0.3).setInteractive();
 
                 warriorBtn.on('pointerdown', () => { playerType = "warrior"; this.scene.start('GameScene'); });
                 mageBtn.on('pointerdown', () => { playerType = "mage"; this.scene.start('GameScene'); });
